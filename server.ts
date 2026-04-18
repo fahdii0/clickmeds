@@ -1,5 +1,4 @@
 import express from "express";
-import { createServer as createViteServer } from "vite";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -161,7 +160,9 @@ app.get("/api/facilities", async (req, res) => {
       stores: facilities.filter(f => f.type === 'store')
     });
   } catch (error) {
-    res.status(500).json({ error: "Failed to fetch facilities" });
+    console.error("Failed to fetch facilities:", error);
+    // Keep frontend functional even if DB is temporarily unavailable.
+    res.json({ hospitals: [], stores: [] });
   }
 });
 
@@ -236,6 +237,7 @@ app.put("/api/seed", async (req, res) => {
 
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
