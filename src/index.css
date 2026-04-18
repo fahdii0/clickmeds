@@ -21,9 +21,6 @@
     position: relative;
     overflow-x: hidden;
     font-size: 15px;
-    transform: scale(0.8);
-    transform-origin: top center;
-    width: 125%;
   }
 }
 
@@ -132,4 +129,4 @@
 .dark-theme .border-red-100 {
   border-color: #7f1d1d !important;
 }
-
+  
