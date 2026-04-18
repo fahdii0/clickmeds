@@ -36,7 +36,11 @@ import {
   RefreshCw,
   Camera,
   Moon,
-  Sun
+  Sun,
+  BellRing,
+  FileText,
+  Truck,
+  MessageCircle
 } from "lucide-react";
 
 // --- Types ---
@@ -286,18 +290,23 @@ const Hero = ({ branding }: { branding: Branding }) => (
       </motion.div>
 
       <div className="flex flex-wrap gap-8 justify-center mb-12 text-[#1a2b4b]/60 font-medium mt-12 bg-medical-secondary/50 p-4 rounded-3xl border border-medical-accent/10">
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-medical-accent" />
-          <span>Find Medicines</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-medical-accent" />
-          <span>Compare Prices</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <CheckCircle2 className="w-5 h-5 text-medical-accent" />
-          <span>Order Easily</span>
-        </div>
+        {[
+          "Find Medicines",
+          "Compare Prices",
+          "Order Easily"
+        ].map((item, index) => (
+          <motion.div
+            key={item}
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35, delay: index * 0.08 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-2"
+          >
+            <CheckCircle2 className="w-5 h-5 text-medical-accent" />
+            <span>{item}</span>
+          </motion.div>
+        ))}
       </div>
       
       <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -898,6 +907,74 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
   );
 };
 
+const SmartServices = () => (
+  <section id="services" className="py-24 px-6 max-w-7xl mx-auto">
+    <div className="flex items-center gap-4 mb-20">
+      <h2 className="text-xs font-black text-slate-400 uppercase tracking-[6px] whitespace-nowrap italic">Smart Services</h2>
+      <div className="h-[1px] w-full bg-slate-100"></div>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
+      {[
+        {
+          title: "Upload Prescription",
+          text: "Upload your doctor prescription and let our pharmacist verify medicines quickly.",
+          icon: <FileText className="w-5 h-5" />,
+          cta: "Upload Now"
+        },
+        {
+          title: "Medicine Reminders",
+          text: "Set refill reminders so your essential medicines are never missed.",
+          icon: <BellRing className="w-5 h-5" />,
+          cta: "Set Reminder"
+        },
+        {
+          title: "Priority Delivery",
+          text: "Get selected urgent medications delivered with faster handling.",
+          icon: <Truck className="w-5 h-5" />,
+          cta: "Enable Priority"
+        },
+        {
+          title: "Pharmacist Chat",
+          text: "Ask dosage and safety questions before placing your final order.",
+          icon: <MessageCircle className="w-5 h-5" />,
+          cta: "Start Chat"
+        }
+      ].map((card, idx) => (
+        <motion.div
+          key={card.title}
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: idx * 0.06 }}
+          viewport={{ once: true }}
+          whileHover={{ y: -6 }}
+          className="bg-white border border-slate-200 rounded-3xl p-8 shadow-sm"
+        >
+          <div className="bg-medical-secondary text-medical-accent w-12 h-12 rounded-2xl flex items-center justify-center mb-6">
+            {card.icon}
+          </div>
+          <h3 className="text-xl font-black text-[#1a2b4b] mb-3">{card.title}</h3>
+          <p className="text-slate-500 text-sm leading-relaxed mb-6">{card.text}</p>
+          <button className="text-xs font-black uppercase tracking-widest text-medical-accent hover:text-[#1a2b4b] transition-colors">
+            {card.cta}
+          </button>
+        </motion.div>
+      ))}
+    </div>
+  </section>
+);
+
+const FloatingActions = ({ onTrackClick }: { onTrackClick: () => void }) => (
+  <div className="fixed right-4 bottom-4 sm:right-6 sm:bottom-6 z-[90] flex flex-col gap-3">
+    <a href="tel:1122" className="bg-red-600 text-white px-4 py-3 rounded-2xl text-xs font-black tracking-widest uppercase shadow-xl shadow-red-300/40 hover:bg-red-700 transition-all hover:-translate-y-0.5">
+      Emergency 1122
+    </a>
+    <button onClick={onTrackClick} className="bg-[#1a2b4b] text-white px-4 py-3 rounded-2xl text-xs font-black tracking-widest uppercase shadow-xl shadow-blue-900/20 hover:bg-medical-accent transition-all hover:-translate-y-0.5">
+      Track Order
+    </button>
+  </div>
+);
+
 const HelpCenter = () => (
   <section id="help" className="py-24 px-6 max-w-7xl mx-auto">
     <div className="flex items-center gap-4 mb-20">
@@ -906,7 +983,13 @@ const HelpCenter = () => (
     </div>
     
     <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-      <div className="bg-white border border-slate-200 rounded-[32px] p-10 shadow-sm">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45 }}
+        viewport={{ once: true }}
+        className="bg-white border border-slate-200 rounded-[32px] p-10 shadow-sm"
+      >
         <div className="bg-[#1a2b4b] w-12 h-12 rounded-2xl flex items-center justify-center mb-8 shadow-lg shadow-blue-900/10">
           <HelpCircle className="w-6 h-6 text-medical-accent" />
         </div>
@@ -934,9 +1017,15 @@ const HelpCenter = () => (
             <p className="mt-4 text-sm text-slate-500 italic font-medium">Delivery is free for orders above Rs. 2,000. For others, it is Rs. 150.</p>
           </details>
         </div>
-      </div>
+      </motion.div>
       
-      <div className="bg-medical-accent p-12 rounded-[40px] text-white relative overflow-hidden shadow-xl shadow-medical-accent/20">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.45, delay: 0.08 }}
+        viewport={{ once: true }}
+        className="bg-medical-accent p-12 rounded-[40px] text-white relative overflow-hidden shadow-xl shadow-medical-accent/20"
+      >
         <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl" />
         <div className="relative z-10">
           <Mail className="w-12 h-12 mb-8 drop-shadow-lg" />
@@ -956,7 +1045,7 @@ const HelpCenter = () => (
             Live Chat Now
           </button>
         </div>
-      </div>
+      </motion.div>
     </div>
   </section>
 );
@@ -1628,6 +1717,7 @@ export default function App() {
         <>
           <Hero branding={branding} />
           <Products onSelectProduct={setSelectedProduct} products={products} />
+          <SmartServices />
           <BloodDonationSection branding={branding} />
           
           {/* Information Sections */}
@@ -1638,7 +1728,15 @@ export default function App() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {hospitals.map((hospital, idx) => (
-                <motion.div key={idx} className="info-card flex flex-col justify-between bg-medical-secondary/30 border-medical-accent/5">
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: idx * 0.05 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -4 }}
+                  className="info-card flex flex-col justify-between bg-medical-secondary/30 border-medical-accent/5"
+                >
                   <div>
                     <div className="font-black text-slate-900 mb-2 leading-tight">{hospital.name}</div>
                     <div className="text-[11px] text-slate-400 uppercase font-black tracking-widest">{hospital.specialists}</div>
@@ -1659,7 +1757,15 @@ export default function App() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {stores.map((store, idx) => (
-                <motion.div key={idx} className="info-card bg-slate-50 border-slate-200">
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: idx * 0.05 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -4 }}
+                  className="info-card bg-slate-50 border-slate-200"
+                >
                    <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
                     <div className="font-black text-slate-900 mb-2">{store.name}</div>
                     <div className="text-xs text-slate-400 font-bold mb-6 italic">{store.address}</div>
@@ -1677,6 +1783,7 @@ export default function App() {
 
           <HelpCenter />
           <Footer branding={branding} />
+          <FloatingActions onTrackClick={() => setIsTrackOpen(true)} />
         </>
       )}
 
