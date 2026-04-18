@@ -1,0 +1,67 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-medical-bg: #f8fafc; /* Very light slate */
+  --color-medical-card: #ffffff;
+  --color-medical-accent: #3eb489; /* Mint Green */
+  --color-medical-accent-dark: #1a2b4b; /* Navy */
+  --color-medical-secondary: #ecfdf5; /* Very light green */
+  --color-text-dim: #64748b;
+  --color-glass-border: #e2e8f0;
+}
+
+@layer base {
+  body {
+    @apply bg-medical-bg text-slate-900 font-sans;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  .medical-glow {
+    box-shadow: 0 4px 20px rgba(62, 180, 137, 0.15);
+  }
+  
+  .medical-glow-secondary {
+    box-shadow: 0 4px 20px rgba(26, 43, 75, 0.1);
+  }
+
+  .glass-card {
+    @apply bg-white;
+    border: 1px solid var(--color-glass-border);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(to bottom right, #1a2b4b, #3eb489);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .cta {
+    @apply bg-medical-accent text-white px-8 py-3 rounded-lg font-bold text-sm cursor-pointer transition-all;
+    box-shadow: 0 4px 14px 0 rgba(62, 180, 137, 0.39);
+  }
+
+  .cta:hover {
+    @apply opacity-90;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(62, 180, 137, 0.23);
+  }
+  
+  .info-card {
+    @apply bg-white border border-slate-200 rounded-xl p-4 transition-all;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .info-card:hover {
+    @apply border-medical-accent/30;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+}
