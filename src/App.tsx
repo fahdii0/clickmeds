@@ -267,13 +267,6 @@ const Navbar = ({ cartCount, onCartClick, onTrackClick, branding, isAdmin, onTog
         {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
       </button>
       <button 
-        onClick={onToggleAdmin}
-        className={`p-2.5 rounded-xl transition-all border ${isAdmin ? 'bg-medical-accent text-white border-medical-accent' : 'bg-slate-100 text-slate-400 border-slate-200 hover:text-medical-accent'}`}
-        title="Toggle Admin Panel"
-      >
-        <Settings className="w-5 h-5" />
-      </button>
-      <button 
         onClick={onCartClick}
         className="relative bg-medical-accent/10 hover:bg-medical-accent/20 text-medical-accent border border-medical-accent/30 p-2.5 rounded-xl transition-all"
       >
