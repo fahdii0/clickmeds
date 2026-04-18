@@ -35,7 +35,7 @@ if (!MONGODB_URI) {
     connectTimeoutMS: 10000,
   })
     .then(() => console.log("Connected to MongoDB successfully"))
-    .catch(err => console.error("MongoDB connection error:", err.message));
+    .catch(err => console.error("MongoDB connection error:", err));
 }
 
 // Schemas
