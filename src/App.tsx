@@ -214,10 +214,28 @@ const BrandLogo = ({ className = "", branding }: { className?: string, branding:
 
 const LogoIcon = ({ className = "w-6 h-6", branding }: { className?: string, branding: Branding }) => (
   <div className={`relative flex items-center justify-center ${className}`}>
-    <div className="relative flex -space-x-[15%] rotate-[20deg]">
-      <div className="w-1/2 h-full rounded-l-full aspect-square" style={{ backgroundColor: branding.primaryColor }} />
-      <div className="w-1/2 h-full rounded-r-full aspect-square" style={{ backgroundColor: branding.secondaryColor }} />
-    </div>
+    <svg viewBox="0 0 200 200" className="w-full h-full drop-shadow-sm overflow-visible">
+      <g transform="rotate(25, 100, 105)">
+        <path
+          d="M75,65 C55,65 40,80 40,100 L40,120 C40,140 55,155 75,155 L95,155 L95,65 L75,65 Z"
+          fill={branding.primaryColor}
+          transform="translate(-10,-4)"
+        />
+      </g>
+      <g transform="rotate(25, 100, 105)">
+        <path
+          d="M105,65 L125,65 C145,65 160,80 160,100 L160,120 C160,140 145,155 125,155 L105,155 L105,65 Z"
+          fill={branding.secondaryColor}
+          transform="translate(10,4)"
+        />
+      </g>
+      <motion.path
+        d="M100,90 C106,78 98,68 103,58 C108,68 100,78 100,90"
+        fill={branding.secondaryColor}
+        animate={{ y: [0, -2, 0] }}
+        transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+    </svg>
   </div>
 );
 
@@ -861,28 +879,41 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
             key={product.id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -8, scale: 1.01 }}
-            transition={{ duration: 0.5, delay: idx * 0.05 }}
+            whileHover={{ y: -10, scale: 1.015 }}
+            transition={{ duration: 0.45, delay: idx * 0.05 }}
             viewport={{ once: true }}
             onClick={() => onSelectProduct(product)}
-            className="info-card flex flex-col group cursor-pointer hover:border-medical-accent/40 bg-white"
+            className="info-card flex flex-col group cursor-pointer hover:border-medical-accent/40 bg-white relative overflow-hidden"
           >
+            <motion.div
+              className="absolute -top-10 -right-10 w-24 h-24 rounded-full bg-medical-accent/10 blur-xl"
+              animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.55, 0.3] }}
+              transition={{ duration: 3, repeat: Infinity, delay: idx * 0.1 }}
+            />
             <div className="h-56 flex items-center justify-center bg-medical-secondary/30 rounded-xl mb-6 group-hover:bg-medical-secondary/50 transition-colors overflow-hidden">
-              <div className="text-medical-accent scale-150 transform group-hover:scale-[1.7] transition-transform duration-500 w-full h-full flex items-center justify-center">
+              <motion.div
+                className="text-medical-accent scale-150 transform group-hover:scale-[1.7] transition-transform duration-500 w-full h-full flex items-center justify-center"
+                animate={{ y: [0, -2, 0] }}
+                transition={{ duration: 2.2, repeat: Infinity, delay: idx * 0.08 }}
+              >
                 {product.image ? (
                   <img src={product.image} alt={product.name} className="w-full h-full object-contain p-4" referrerPolicy="no-referrer" />
                 ) : (
                   product.icon || (product.iconName && ICON_MAP[product.iconName])
                 )}
-              </div>
+              </motion.div>
             </div>
             
             <div className="px-2 pb-2">
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-lg font-bold text-[#1a2b4b] group-hover:text-medical-accent transition-colors leading-tight">{product.name}</h3>
-                <div className="text-[10px] text-yellow-600 font-bold bg-yellow-50 px-2.5 py-1 rounded-full border border-yellow-100 uppercase">
+                <motion.div
+                  className="text-[10px] text-yellow-600 font-bold bg-yellow-50 px-2.5 py-1 rounded-full border border-yellow-100 uppercase"
+                  animate={{ scale: [1, 1.06, 1] }}
+                  transition={{ duration: 2, repeat: Infinity, delay: idx * 0.05 }}
+                >
                   ⭐ {product.rating}
-                </div>
+                </motion.div>
               </div>
               <span className="text-[10px] uppercase font-bold tracking-widest text-[#3eb489] mb-4 block bg-medical-secondary/50 px-2 py-0.5 rounded w-fit">
                 {product.category}
@@ -890,9 +921,12 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
               
               <div className="mt-6 flex items-center justify-between">
                 <div className="text-xl font-bold text-[#1a2b4b] font-mono">Rs. {product.price.toLocaleString()}</div>
-                <button className="bg-medical-accent/5 border border-medical-accent/20 text-medical-accent text-xs font-bold p-2.5 rounded-lg group-hover:bg-medical-accent group-hover:text-white transition-all shadow-sm">
+                <motion.button
+                  whileTap={{ scale: 0.92 }}
+                  className="bg-medical-accent/5 border border-medical-accent/20 text-medical-accent text-xs font-bold p-2.5 rounded-lg group-hover:bg-medical-accent group-hover:text-white transition-all shadow-sm"
+                >
                   <ShoppingBag className="w-4 h-4" />
-                </button>
+                </motion.button>
               </div>
             </div>
           </motion.div>

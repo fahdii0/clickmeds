@@ -20,7 +20,7 @@
     -webkit-font-smoothing: antialiased;
     position: relative;
     overflow-x: hidden;
-    font-size: 17px;
+    font-size: 15px;
   }
 }
 
@@ -69,7 +69,7 @@
 
 /* Slightly wider layout for a larger overall website feel. */
 .max-w-7xl {
-  max-width: 88rem;
+  max-width: 76rem;
 }
 
 /* Dark mode styling that works with the existing utility-heavy markup. */
