@@ -1,5 +1,5 @@
 import { useState, ReactNode, useMemo, useEffect, useRef, ChangeEvent } from "react";
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { 
   Activity, 
   MapPin, 
@@ -821,6 +821,7 @@ const TrackOrderModal = ({ onClose }: { onClose: () => void }) => {
 const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product) => void, products: Product[] }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const shouldReduceMotion = useReducedMotion();
   
   const categories = useMemo(() => {
     const cats = ["All", ...new Set(products.map(p => p.category))];
@@ -873,13 +874,22 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
         ))}
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+      <motion.div
+        key={`${activeCategory}-${searchTerm}`}
+        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
+        animate={shouldReduceMotion ? undefined : { opacity: 1 }}
+        transition={shouldReduceMotion ? undefined : { duration: 0.25 }}
+        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
+      >
+        <AnimatePresence mode="popLayout">
         {filteredProducts.map((product, idx) => (
           <motion.div
             key={product.id}
+            layout
             initial={{ opacity: 0, y: 26, scale: 0.96, rotate: -1 }}
             whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
             whileHover={{ y: -8, rotateX: 2, rotateY: -2, scale: 1.01 }}
+            exit={{ opacity: 0, y: 14, scale: 0.96 }}
             transition={{ type: "spring", stiffness: 130, damping: 17, delay: idx * 0.04 }}
             viewport={{ once: true }}
             onClick={() => onSelectProduct(product)}
@@ -902,6 +912,11 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
                   product.icon || (product.iconName && ICON_MAP[product.iconName])
                 )}
               </motion.div>
+              <div
+                className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-[#1a2b4b] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg pointer-events-none opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+              >
+                Quick View
+              </div>
             </div>
             
             <div className="px-2 pb-2">
@@ -931,7 +946,8 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
             </div>
           </motion.div>
         ))}
-      </div>
+        </AnimatePresence>
+      </motion.div>
       {filteredProducts.length === 0 && (
         <div className="col-span-full py-20 text-center text-slate-400 font-medium italic">
           No medical products found matching your search.
