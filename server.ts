@@ -25,17 +25,72 @@ app.get("/api/health", (req, res) => res.json({ status: "ok", time: new Date().t
 // MongoDB Connection
 const MONGODB_URI = process.env.MONGODB_URI;
 
+type MongoCache = {
+  conn: typeof mongoose | null;
+  promise: Promise<typeof mongoose> | null;
+};
+
+const globalForMongo = globalThis as typeof globalThis & {
+  __mongoCache?: MongoCache;
+};
+
+const mongoCache: MongoCache = globalForMongo.__mongoCache ?? { conn: null, promise: null };
+globalForMongo.__mongoCache = mongoCache;
+
+async function connectToDatabase() {
+  if (!MONGODB_URI) {
+    throw new Error("MONGODB_URI is not set.");
+  }
+
+  if (mongoCache.conn) {
+    return mongoCache.conn;
+  }
+
+  if (!mongoCache.promise) {
+    console.log("Attempting to connect to MongoDB...");
+    mongoCache.promise = mongoose.connect(MONGODB_URI, {
+      serverSelectionTimeoutMS: 15000,
+      connectTimeoutMS: 15000,
+      maxPoolSize: 10,
+      minPoolSize: 0,
+      retryWrites: true,
+    });
+  }
+
+  try {
+    mongoCache.conn = await mongoCache.promise;
+    console.log("Connected to MongoDB successfully");
+    return mongoCache.conn;
+  } catch (err) {
+    mongoCache.promise = null;
+    throw err;
+  }
+}
+
 if (!MONGODB_URI) {
   console.warn("MONGODB_URI is not set. Database routes will fail until it is configured.");
 } else {
-  console.log("Attempting to connect to MongoDB...");
-  mongoose.connect(MONGODB_URI, {
-    serverSelectionTimeoutMS: 5000,
-    connectTimeoutMS: 10000,
-  })
-    .then(() => console.log("Connected to MongoDB successfully"))
-    .catch(err => console.error("MongoDB connection error:", err));
+  connectToDatabase().catch(err => console.error("MongoDB connection error:", err));
 }
+
+app.use("/api", async (req, res, next) => {
+  // These endpoints are intentionally allowed without a hard DB requirement.
+  if (req.path === "/health" || req.path === "/db-status") {
+    return next();
+  }
+
+  if (!MONGODB_URI) {
+    return res.status(500).json({ error: "MONGODB_URI is not configured on the server." });
+  }
+
+  try {
+    await connectToDatabase();
+    return next();
+  } catch (error: any) {
+    console.error("MongoDB connection error:", error);
+    return res.status(503).json({ error: "Database temporarily unavailable. Please retry." });
+  }
+});
 
 // Schemas
 const brandingSchema = new mongoose.Schema({
