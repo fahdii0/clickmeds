@@ -822,6 +822,24 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
   const [searchTerm, setSearchTerm] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
   const shouldReduceMotion = useReducedMotion();
+
+  const gridVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.045, delayChildren: 0.03 }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 12, filter: "blur(2px)" },
+    show: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      transition: { duration: 0.36, ease: [0.22, 1, 0.36, 1] }
+    }
+  };
   
   const categories = useMemo(() => {
     const cats = ["All", ...new Set(products.map(p => p.category))];
@@ -876,9 +894,10 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
       
       <motion.div
         key={`${activeCategory}-${searchTerm}`}
-        initial={shouldReduceMotion ? undefined : { opacity: 0 }}
-        animate={shouldReduceMotion ? undefined : { opacity: 1 }}
-        transition={shouldReduceMotion ? undefined : { duration: 0.2, ease: "easeOut" }}
+        variants={shouldReduceMotion ? undefined : gridVariants}
+        initial={shouldReduceMotion ? undefined : "hidden"}
+        animate={shouldReduceMotion ? undefined : "show"}
+        transition={shouldReduceMotion ? undefined : { duration: 0.25, ease: "easeOut" }}
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8"
       >
         <AnimatePresence mode="popLayout">
@@ -886,8 +905,9 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
           <motion.div
             key={product.id}
             layout
-            initial={shouldReduceMotion ? undefined : { opacity: 0, y: 14, scale: 0.985 }}
-            animate={shouldReduceMotion ? undefined : { opacity: 1, y: 0, scale: 1 }}
+            variants={shouldReduceMotion ? undefined : cardVariants}
+            initial={shouldReduceMotion ? undefined : "hidden"}
+            animate={shouldReduceMotion ? undefined : "show"}
             whileHover={shouldReduceMotion ? undefined : { y: -4, scale: 1.006 }}
             exit={shouldReduceMotion ? undefined : { opacity: 0, y: 8, scale: 0.985 }}
             transition={{ type: "spring", stiffness: 220, damping: 24, mass: 0.65 }}
@@ -895,15 +915,19 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
             onClick={() => onSelectProduct(product)}
             className="info-card flex flex-col group cursor-pointer hover:border-medical-accent/40 bg-white relative overflow-hidden"
           >
-            <div className="absolute top-0 -left-1/2 w-1/2 h-full bg-gradient-to-r from-transparent via-medical-accent/15 to-transparent group-hover:translate-x-[260%] transition-transform duration-700 ease-out" />
+            <div className="absolute top-0 -left-1/2 w-1/2 h-full bg-gradient-to-r from-transparent via-medical-accent/15 to-transparent group-hover:translate-x-[260%] transition-transform duration-900 ease-out" />
             <div className="h-56 flex items-center justify-center bg-medical-secondary/30 rounded-xl mb-6 group-hover:bg-medical-secondary/50 transition-colors overflow-hidden">
-              <div className="text-medical-accent scale-150 transform group-hover:scale-[1.62] transition-transform duration-300 w-full h-full flex items-center justify-center">
+              <motion.div
+                whileHover={shouldReduceMotion ? undefined : { scale: 1.08, rotate: -1 }}
+                transition={{ type: "spring", stiffness: 280, damping: 20 }}
+                className="text-medical-accent scale-150 transform group-hover:scale-[1.62] transition-transform duration-300 w-full h-full flex items-center justify-center"
+              >
                 {product.image ? (
                   <img src={product.image} alt={product.name} className="w-full h-full object-contain p-4" referrerPolicy="no-referrer" />
                 ) : (
                   product.icon || (product.iconName && ICON_MAP[product.iconName])
                 )}
-              </div>
+              </motion.div>
               <div
                 className="absolute bottom-3 left-1/2 -translate-x-1/2 bg-[#1a2b4b] text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-lg pointer-events-none opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
               >
@@ -927,9 +951,10 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
               </span>
               
               <div className="mt-6 flex items-center justify-between">
-                <div className="text-xl font-bold text-[#1a2b4b] font-mono">Rs. {product.price.toLocaleString()}</div>
+                <div className="text-xl font-bold text-[#1a2b4b] font-mono transition-transform duration-300 group-hover:translate-x-0.5">Rs. {product.price.toLocaleString()}</div>
                 <motion.button
                   whileTap={{ scale: 0.92 }}
+                  whileHover={shouldReduceMotion ? undefined : { scale: 1.04 }}
                   className="bg-medical-accent/5 border border-medical-accent/20 text-medical-accent text-xs font-bold p-2.5 rounded-lg group-hover:bg-medical-accent group-hover:text-white transition-all shadow-sm"
                 >
                   <ShoppingBag className="w-4 h-4" />
