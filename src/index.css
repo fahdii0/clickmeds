@@ -21,12 +21,6 @@
     position: relative;
     overflow-x: hidden;
     font-size: 15px;
-    
-    /* --- YAHAN CHANGES KIYE HAIN --- */
-    transform: scale(0.8);
-    transform-origin: top center; /* Website top se start hogi aur center mein rahegi */
-    width: 125%; /* Scale 0.8 karne par gap fill karne ke liye width badhayi hai */
-    left: -12.5%; /* Screen par sahi dikhne ke liye thoda adjust kiya hai */
   }
 }
 
@@ -78,7 +72,7 @@
   max-width: 76rem;
 }
 
-/* Dark mode styling */
+/* Dark mode styling that works with the existing utility-heavy markup. */
 .dark-theme {
   background: linear-gradient(180deg, #020617 0%, #0b1220 100%);
   color: #e2e8f0;
@@ -135,3 +129,4 @@
 .dark-theme .border-red-100 {
   border-color: #7f1d1d !important;
 }
+
