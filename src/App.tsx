@@ -398,6 +398,7 @@ const ProductDetailsModal = ({ product, onClose, onAddToCart }: { product: Produ
 const CheckoutModal = ({ cart, updateCart, onClose, onFinish }: { cart: CartItem[], updateCart: (p: CartItem, q: number) => void, onClose: () => void, onFinish: (id: string) => void }) => {
   const [step, setStep] = useState(1);
   const [customer, setCustomer] = useState({ name: '', address: '', phone: '' });
+  const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery (COD)');
   const total = cart.reduce((acc, p) => acc + (p.price * p.quantity), 0);
   const orderId = useMemo(() => "CM-" + Math.random().toString(36).substr(2, 9).toUpperCase(), []);
   
@@ -410,7 +411,8 @@ const CheckoutModal = ({ cart, updateCart, onClose, onFinish }: { cart: CartItem
           orderId,
           items: cart.map(i => ({ name: i.name, quantity: i.quantity, price: i.price })),
           total,
-          customer
+          customer,
+          paymentMethod
         })
       });
       if (response.ok) {
@@ -512,11 +514,46 @@ const CheckoutModal = ({ cart, updateCart, onClose, onFinish }: { cart: CartItem
                 className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 outline-none focus:border-medical-accent transition-all text-sm shadow-inner" 
               />
             </div>
-            <div className="bg-medical-secondary/50 p-4 rounded-xl border border-medical-accent/10">
-              <p className="text-xs text-medical-accent font-bold flex items-center gap-2">
-                <CheckCircle2 className="w-4 h-4" />
-                Payment Method: Cash on Delivery (COD)
-              </p>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-sm font-black uppercase tracking-widest text-slate-500">Payment Method</h3>
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Choose one</span>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {[
+                  'Cash on Delivery (COD)',
+                  'JazzCash',
+                  'Easypaisa',
+                  'Credit Card'
+                ].map((method) => (
+                  <motion.button
+                    key={method}
+                    type="button"
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => setPaymentMethod(method)}
+                    className={`rounded-2xl border px-4 py-4 text-left transition-all duration-200 ${paymentMethod === method ? 'bg-medical-secondary border-medical-accent text-[#1a2b4b] shadow-md' : 'bg-white border-slate-200 text-slate-600 hover:border-medical-accent/40 hover:bg-slate-50'}`}
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div>
+                        <p className="font-black text-sm">{method}</p>
+                        <p className="text-[11px] mt-1 font-medium opacity-80">
+                          {method === 'Cash on Delivery (COD)' && 'Pay when your order arrives.'}
+                          {method === 'JazzCash' && 'Use your JazzCash wallet for fast payment.'}
+                          {method === 'Easypaisa' && 'Pay securely through Easypaisa.'}
+                          {method === 'Credit Card' && 'Visa / Mastercard supported.'}
+                        </p>
+                      </div>
+                      <div className={`w-3 h-3 rounded-full border ${paymentMethod === method ? 'bg-medical-accent border-medical-accent' : 'border-slate-300'}`} />
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
+              <div className="bg-medical-secondary/50 p-4 rounded-xl border border-medical-accent/10">
+                <p className="text-xs text-medical-accent font-bold flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Selected Payment: {paymentMethod}
+                </p>
+              </div>
             </div>
             <button onClick={handlePlaceOrder} className="w-full cta py-4 mt-4 !bg-[#1a2b4b] hover:!bg-medical-accent transition-all">
               Place Order
@@ -532,6 +569,7 @@ const CheckoutModal = ({ cart, updateCart, onClose, onFinish }: { cart: CartItem
             <h2 className="text-3xl font-bold text-[#1a2b4b]">Thank You!</h2>
             <div className="space-y-2">
               <p className="text-slate-500">Your order has been placed successfully.</p>
+              <p className="text-slate-500 text-sm">Payment Method: <span className="font-bold text-[#1a2b4b]">{paymentMethod}</span></p>
               <p className="text-slate-400 text-sm">
                 Order ID: <span className="text-[#1a2b4b] font-mono font-bold">{orderId}</span>
               </p>
