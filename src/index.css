@@ -1,431 +1,137 @@
-Here is the HTML code that applies a transform: scale(0.8); to the body element of your medical dashboard interface, while maintaining the existing design and dark mode functionality.
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>MedFlow — Intelligent Medical Dashboard</title>
-  <!-- Tailwind CSS v4 (via CDN + custom overrides) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Custom CSS with the @import and theme definitions -->
-  <style>
-    /* Your original custom CSS, plus the body scale transformation */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+  
+  --color-medical-bg: #f8fafc; /* Very light slate */
+  --color-medical-card: #ffffff;
+  --color-medical-accent: #3eb489; /* Mint Green */
+  --color-medical-accent-dark: #1a2b4b; /* Navy */
+  --color-medical-secondary: #ecfdf5; /* Very light green */
+  --color-text-dim: #64748b;
+  --color-glass-border: #e2e8f0;
+}
 
-    /* Reset / theme layer simulation (since Tailwind v4 is not fully native, we replicate your theme vars) */
-    :root {
-      --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-      --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-      --color-medical-bg: #f8fafc;
-      --color-medical-card: #ffffff;
-      --color-medical-accent: #3eb489;
-      --color-medical-accent-dark: #1a2b4b;
-      --color-medical-secondary: #ecfdf5;
-      --color-text-dim: #64748b;
-      --color-glass-border: #e2e8f0;
-    }
-
-    body {
-      background-color: var(--color-medical-bg);
-      color: #0f172a;
-      font-family: var(--font-sans);
-      -webkit-font-smoothing: antialiased;
-      position: relative;
-      overflow-x: hidden;
-      font-size: 15px;
-      /* 🔍 TRANSFORM SCALE 0.8 — as requested */
-      transform: scale(0.8);
-      transform-origin: top center;
-      /* adjust width to avoid horizontal scroll due to scaling */
-      width: 125%;  /* counter scaling: 1/0.8 = 1.25 => 125% width */
-      margin-left: -12.5%; /* center the scaled content */
-    }
-
-    /* Ensure root container doesn't clip */
-    html {
-      overflow-x: auto;
-      background-color: var(--color-medical-bg);
-    }
-
-    /* utilities & custom classes */
-    .medical-glow {
-      box-shadow: 0 4px 20px rgba(62, 180, 137, 0.15);
-    }
-    .medical-glow-secondary {
-      box-shadow: 0 4px 20px rgba(26, 43, 75, 0.1);
-    }
-    .glass-card {
-      background-color: white;
-      border: 1px solid var(--color-glass-border);
-      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    }
-    .text-gradient {
-      background: linear-gradient(to bottom right, #1a2b4b, #3eb489);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .cta {
-      background-color: var(--color-medical-accent);
-      color: white;
-      padding: 0.75rem 2rem;
-      border-radius: 0.5rem;
-      font-weight: 700;
-      font-size: 0.875rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 14px 0 rgba(62, 180, 137, 0.39);
-      display: inline-block;
-      text-align: center;
-    }
-    .cta:hover {
-      opacity: 0.9;
-      transform: translateY(-1px);
-      box-shadow: 0 6px 20px rgba(62, 180, 137, 0.23);
-    }
-    .info-card {
-      background-color: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 0.75rem;
-      padding: 1rem;
-      transition: all 0.2s;
-      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    }
-    .info-card:hover {
-      border-color: rgba(62, 180, 137, 0.3);
-      box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    }
-    .max-w-7xl {
-      max-width: 76rem;
-    }
-
-    /* Dark mode styling (triggered by .dark-theme on body or wrapper) */
-    .dark-theme {
-      background: linear-gradient(180deg, #020617 0%, #0b1220 100%);
-      color: #e2e8f0;
-    }
-    .dark-theme .bg-white,
-    .dark-theme .bg-slate-50,
-    .dark-theme .bg-medical-secondary,
-    .dark-theme .bg-medical-secondary\/30,
-    .dark-theme .bg-medical-secondary\/50,
-    .dark-theme .info-card,
-    .dark-theme .glass-card {
-      background-color: #0f172a !important;
-      border-color: #334155 !important;
-    }
-    .dark-theme .bg-white\/80,
-    .dark-theme .bg-white\/10,
-    .dark-theme .bg-white\/20 {
-      background-color: rgba(15, 23, 42, 0.85) !important;
-    }
-    .dark-theme .text-slate-900,
-    .dark-theme .text-\[\#1a2b4b\] {
-      color: #e2e8f0 !important;
-    }
-    .dark-theme .text-slate-800,
-    .dark-theme .text-slate-700,
-    .dark-theme .text-slate-600,
-    .dark-theme .text-slate-500,
-    .dark-theme .text-slate-400 {
-      color: #94a3b8 !important;
-    }
-    .dark-theme .border-slate-50,
-    .dark-theme .border-slate-100,
-    .dark-theme .border-slate-200 {
-      border-color: #334155 !important;
-    }
-    .dark-theme input,
-    .dark-theme select,
-    .dark-theme textarea {
-      background-color: #0b1220 !important;
-      border-color: #334155 !important;
-      color: #e2e8f0 !important;
-    }
-    .dark-theme .bg-red-50 {
-      background-color: #2a0d11 !important;
-    }
-    .dark-theme .border-red-100 {
-      border-color: #7f1d1d !important;
-    }
-    /* extra smoothness for dark mode toggle */
-    .transition-theme {
-      transition: background 0.2s, color 0.2s, border-color 0.2s;
-    }
-  </style>
-</head>
-<body class="transition-theme">
-  <!-- main container: centered content with responsive padding -->
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-10">
+@layer base {
+  body {
+    @apply bg-medical-bg text-slate-900 font-sans;
+    -webkit-font-smoothing: antialiased;
+    position: relative;
+    overflow-x: hidden;
+    font-size: 15px;
     
-    <!-- Header / Navigation Bar -->
-    <header class="flex flex-wrap justify-between items-center mb-10 gap-4">
-      <div class="flex items-center gap-2">
-        <div class="w-8 h-8 rounded-lg bg-medical-accent flex items-center justify-center shadow-md">
-          <span class="text-white font-bold text-lg">⚕️</span>
-        </div>
-        <h1 class="text-2xl font-bold tracking-tight"><span class="text-gradient">MedFlow</span><span class="text-slate-600 dark:text-slate-300"> | Insight</span></h1>
-      </div>
-      <div class="flex items-center gap-5">
-        <div class="hidden md:flex gap-6 text-sm font-medium">
-          <a href="#" class="text-slate-700 dark:text-slate-300 hover:text-medical-accent transition">Dashboard</a>
-          <a href="#" class="text-slate-700 dark:text-slate-300 hover:text-medical-accent transition">Patients</a>
-          <a href="#" class="text-slate-700 dark:text-slate-300 hover:text-medical-accent transition">Analytics</a>
-          <a href="#" class="text-slate-700 dark:text-slate-300 hover:text-medical-accent transition">Protocols</a>
-        </div>
-        <!-- Dark mode toggle button -->
-        <button id="darkModeToggle" class="glass-card p-2 rounded-full w-10 h-10 flex items-center justify-center text-slate-600 dark:text-slate-200 hover:scale-105 transition">
-          🌙
-        </button>
-        <div class="w-8 h-8 rounded-full bg-medical-accent-dark bg-opacity-20 flex items-center justify-center ring-2 ring-medical-accent/30">
-          <span class="text-medical-accent-dark dark:text-medical-accent font-semibold text-sm">DR</span>
-        </div>
-      </div>
-    </header>
+    /* --- YAHAN CHANGES KIYE HAIN --- */
+    transform: scale(0.8);
+    transform-origin: top center; /* Website top se start hogi aur center mein rahegi */
+    width: 125%; /* Scale 0.8 karne par gap fill karne ke liye width badhayi hai */
+    left: -12.5%; /* Screen par sahi dikhne ke liye thoda adjust kiya hai */
+  }
+}
 
-    <!-- Hero Section / welcome banner -->
-    <div class="glass-card rounded-2xl p-6 md:p-8 mb-10 bg-gradient-to-r from-white to-medical-secondary/50 dark:from-[#0f172a] dark:to-[#1e293b]">
-      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <span class="text-medical-accent text-sm font-semibold tracking-wide">✨ CLINICAL INTELLIGENCE</span>
-          <h2 class="text-3xl md:text-4xl font-bold mt-1">Welcome back, Dr. Chen <span class="text-medical-accent">👩‍⚕️</span></h2>
-          <p class="text-slate-500 dark:text-slate-400 mt-2 max-w-xl">Your AI-assisted medical hub. 12 new updates since yesterday.</p>
-        </div>
-        <div class="flex gap-3">
-          <button class="cta">➕ New Report</button>
-          <button class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-5 py-2 rounded-lg font-medium text-sm shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition">📋 Summaries</button>
-        </div>
-      </div>
-    </div>
+@layer utilities {
+  .medical-glow {
+    box-shadow: 0 4px 20px rgba(62, 180, 137, 0.15);
+  }
+  
+  .medical-glow-secondary {
+    box-shadow: 0 4px 20px rgba(26, 43, 75, 0.1);
+  }
 
-    <!-- Stats Cards Grid -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-      <div class="info-card">
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 dark:text-slate-400 text-sm font-medium">Total Patients</span>
-          <span class="text-medical-accent text-xl">🫀</span>
-        </div>
-        <p class="text-3xl font-bold mt-2 text-slate-800 dark:text-white">1,284</p>
-        <p class="text-xs text-green-600 dark:text-green-400 mt-1 flex items-center gap-1">▲ +8.2% from last month</p>
-      </div>
-      <div class="info-card">
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 dark:text-slate-400 text-sm">Active Alerts</span>
-          <span class="text-amber-500 text-xl">⚠️</span>
-        </div>
-        <p class="text-3xl font-bold mt-2 text-slate-800 dark:text-white">3</p>
-        <p class="text-xs text-slate-400 mt-1">Requires attention</p>
-      </div>
-      <div class="info-card">
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 dark:text-slate-400 text-sm">Recovery Rate</span>
-          <span class="text-medical-accent text-xl">📈</span>
-        </div>
-        <p class="text-3xl font-bold mt-2 text-slate-800 dark:text-white">94.3%</p>
-        <p class="text-xs text-slate-400 mt-1">↑ 2.1% vs benchmark</p>
-      </div>
-      <div class="info-card">
-        <div class="flex items-center justify-between">
-          <span class="text-slate-500 dark:text-slate-400 text-sm">Pending Labs</span>
-          <span class="text-medical-accent-dark text-xl">🧪</span>
-        </div>
-        <p class="text-3xl font-bold mt-2 text-slate-800 dark:text-white">17</p>
-        <p class="text-xs text-slate-400 mt-1">Priority: 5 critical</p>
-      </div>
-    </div>
+  .glass-card {
+    @apply bg-white;
+    border: 1px solid var(--color-glass-border);
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  }
+  
+  .text-gradient {
+    background: linear-gradient(to bottom right, #1a2b4b, #3eb489);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 
-    <!-- Two Column Layout: Left (Recent activity & upcoming) + Right (AI insights) -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
-      <!-- Left column (2/3 span) -->
-      <div class="lg:col-span-2 space-y-8">
-        <!-- recent consultations -->
-        <div class="glass-card rounded-xl p-5">
-          <div class="flex justify-between items-center mb-4 flex-wrap">
-            <h3 class="text-lg font-bold text-slate-800 dark:text-white">🩺 Recent Consultations</h3>
-            <a href="#" class="text-sm text-medical-accent font-medium">View all →</a>
-          </div>
-          <div class="divide-y divide-slate-100 dark:divide-slate-800">
-            <div class="py-3 flex flex-wrap justify-between items-center gap-2">
-              <div><span class="font-medium">Eleanor Rigby</span> <span class="text-slate-500 text-sm ml-2">Cardiology follow-up</span></div>
-              <div class="text-sm text-slate-500">10:30 AM · pending review</div>
-            </div>
-            <div class="py-3 flex flex-wrap justify-between items-center gap-2">
-              <div><span class="font-medium">James Wilson</span> <span class="text-slate-500 text-sm ml-2">Post-op assessment</span></div>
-              <div class="text-sm text-slate-500">Yesterday, 4:15 PM · completed</div>
-            </div>
-            <div class="py-3 flex flex-wrap justify-between items-center gap-2">
-              <div><span class="font-medium">Maria Santos</span> <span class="text-slate-500 text-sm ml-2">Neurology consultation</span></div>
-              <div class="text-sm text-slate-500">Yesterday, 11:20 AM · completed</div>
-            </div>
-            <div class="py-3 flex flex-wrap justify-between items-center gap-2">
-              <div><span class="font-medium">Dr. A. Kapoor</span> <span class="text-slate-500 text-sm ml-2">Collaborative case</span></div>
-              <div class="text-sm text-slate-500">Nov 14, 2025 · new note</div>
-            </div>
-          </div>
-        </div>
+  .cta {
+    @apply bg-medical-accent text-white px-8 py-3 rounded-lg font-bold text-sm cursor-pointer transition-all;
+    box-shadow: 0 4px 14px 0 rgba(62, 180, 137, 0.39);
+  }
 
-        <!-- Upcoming appointments & tasks -->
-        <div class="glass-card rounded-xl p-5">
-          <h3 class="text-lg font-bold text-slate-800 dark:text-white mb-3">📅 Upcoming Schedule</h3>
-          <div class="space-y-3">
-            <div class="flex items-start gap-3">
-              <div class="w-12 text-center bg-medical-secondary dark:bg-slate-800 rounded-lg py-1 text-xs font-semibold text-medical-accent-dark">10:00</div>
-              <div><span class="font-medium">Multidisciplinary Rounds</span><div class="text-xs text-slate-500">Hybrid - conference room A</div></div>
-            </div>
-            <div class="flex items-start gap-3">
-              <div class="w-12 text-center bg-medical-secondary dark:bg-slate-800 rounded-lg py-1 text-xs font-semibold text-medical-accent-dark">12:30</div>
-              <div><span class="font-medium">Lunch & Learn: AI Diagnostics</span><div class="text-xs text-slate-500">Virtual · Dr. Lin presenting</div></div>
-            </div>
-            <div class="flex items-start gap-3">
-              <div class="w-12 text-center bg-red-50 dark:bg-red-900/30 rounded-lg py-1 text-xs font-semibold text-red-600">14:15</div>
-              <div><span class="font-medium">Critical Case Review</span><div class="text-xs text-slate-500">ICU family meeting (urgent)</div></div>
-            </div>
-            <div class="flex items-start gap-3">
-              <div class="w-12 text-center bg-medical-secondary dark:bg-slate-800 rounded-lg py-1 text-xs">16:00</div>
-              <div><span class="font-medium">Research Journal Club</span><div class="text-xs text-slate-500">Zoom link</div></div>
-            </div>
-          </div>
-        </div>
-      </div>
+  .cta:hover {
+    @apply opacity-90;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(62, 180, 137, 0.23);
+  }
+  
+  .info-card {
+    @apply bg-white border border-slate-200 rounded-xl p-4 transition-all;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  }
 
-      <!-- Right column: AI clinical insight card -->
-      <div class="space-y-6">
-        <div class="info-card bg-gradient-to-br from-medical-secondary/30 to-white dark:from-slate-800/50 dark:to-slate-900 border-medical-accent/20">
-          <div class="flex items-center gap-2 mb-3">
-            <span class="text-2xl">🧠</span>
-            <h3 class="font-bold text-slate-800 dark:text-white">MedFlow AI Insight</h3>
-          </div>
-          <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">Based on recent lab trends, patient cohort #422 shows elevated inflammatory markers. Suggest reviewing immunosuppression protocol. <span class="text-medical-accent font-medium">Recommendation:</span> schedule follow-up within 48h.</p>
-          <div class="mt-4 flex justify-between items-center">
-            <span class="text-xs text-slate-400">Confidence: 94%</span>
-            <button class="text-xs bg-medical-accent/10 hover:bg-medical-accent/20 text-medical-accent-dark dark:text-medical-accent px-3 py-1 rounded-full transition">Analyze details →</button>
-          </div>
-        </div>
+  .info-card:hover {
+    @apply border-medical-accent/30;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  }
+}
 
-        <div class="glass-card rounded-xl p-5">
-          <h4 class="font-semibold flex items-center gap-2"><span>📊</span> Quality Metrics</h4>
-          <div class="mt-3 space-y-2">
-            <div><div class="flex justify-between text-xs"><span>Medication adherence</span><span>87%</span></div><div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 mt-1"><div class="bg-medical-accent h-1.5 rounded-full w-[87%]"></div></div></div>
-            <div><div class="flex justify-between text-xs"><span>Patient satisfaction</span><span>92%</span></div><div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 mt-1"><div class="bg-medical-accent h-1.5 rounded-full w-[92%]"></div></div></div>
-            <div><div class="flex justify-between text-xs"><span>Readmission rate</span><span>8%</span></div><div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-1.5 mt-1"><div class="bg-amber-400 h-1.5 rounded-full w-[8%]"></div></div></div>
-          </div>
-        </div>
+/* Slightly wider layout for a larger overall website feel. */
+.max-w-7xl {
+  max-width: 76rem;
+}
 
-        <div class="p-4 rounded-xl bg-medical-accent/5 border border-medical-accent/20 text-center">
-          <p class="text-sm font-medium text-medical-accent-dark dark:text-medical-accent">🔄 EMR Integration Active</p>
-          <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Last sync: 2 minutes ago · All systems operational</p>
-        </div>
-      </div>
-    </div>
+/* Dark mode styling */
+.dark-theme {
+  background: linear-gradient(180deg, #020617 0%, #0b1220 100%);
+  color: #e2e8f0;
+}
 
-    <!-- Patient quick list / recent cases table style -->
-    <div class="glass-card rounded-xl overflow-hidden mb-8">
-      <div class="px-6 py-4 border-b border-slate-100 dark:border-slate-800 flex justify-between items-center">
-        <h3 class="font-bold text-slate-800 dark:text-white">🩸 Critical Labs & Alerts</h3>
-        <span class="text-xs bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 px-2 py-1 rounded-full">High priority</span>
-      </div>
-      <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-100 dark:divide-slate-800">
-          <thead class="bg-slate-50 dark:bg-slate-900/50">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Patient</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Test</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Value</th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-slate-500 uppercase">Status</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-            <tr>
-              <td class="px-6 py-3 text-sm font-medium">R. Williams</td>
-              <td class="px-6 py-3 text-sm">Troponin I</td>
-              <td class="px-6 py-3 text-sm font-mono">0.089 ng/mL</td>
-              <td class="px-6 py-3"><span class="text-red-600 bg-red-50 dark:bg-red-900/20 px-2 py-0.5 rounded-full text-xs">Critical</span></td>
-            </tr>
-            <tr>
-              <td class="px-6 py-3 text-sm font-medium">S. Chen</td>
-              <td class="px-6 py-3 text-sm">WBC Count</td>
-              <td class="px-6 py-3 text-sm font-mono">13.4 ×10³/µL</td>
-              <td class="px-6 py-3"><span class="text-amber-600 bg-amber-50 dark:bg-amber-900/20 px-2 py-0.5 rounded-full text-xs">Elevated</span></td>
-            </tr>
-            <tr>
-              <td class="px-6 py-3 text-sm font-medium">M. Torres</td>
-              <td class="px-6 py-3 text-sm">Lactate</td>
-              <td class="px-6 py-3 text-sm font-mono">2.3 mmol/L</td>
-              <td class="px-6 py-3"><span class="text-green-700 bg-green-50 dark:bg-green-900/20 px-2 py-0.5 rounded-full text-xs">Borderline</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+.dark-theme .bg-white,
+.dark-theme .bg-slate-50,
+.dark-theme .bg-medical-secondary,
+.dark-theme .bg-medical-secondary\/30,
+.dark-theme .bg-medical-secondary\/50,
+.dark-theme .info-card,
+.dark-theme .glass-card {
+  background-color: #0f172a !important;
+  border-color: #334155 !important;
+}
 
-    <!-- Footer small note -->
-    <footer class="text-center text-xs text-slate-400 border-t border-slate-200 dark:border-slate-800 pt-6 mt-4">
-      <p>© 2025 MedFlow — Secure clinical intelligence platform | Compliant with HIPAA & GDPR standards</p>
-      <p class="mt-1">💡 Body transform scale(0.8) applied — full interface elegantly scaled while preserving responsiveness</p>
-    </footer>
-  </div>
+.dark-theme .bg-white\/80,
+.dark-theme .bg-white\/10,
+.dark-theme .bg-white\/20 {
+  background-color: rgba(15, 23, 42, 0.85) !important;
+}
 
-  <!-- dark mode toggle script with local storage -->
-  <script>
-    (function() {
-      const toggleBtn = document.getElementById('darkModeToggle');
-      // Check for saved preference
-      const isDarkStored = localStorage.getItem('medflow-dark-mode') === 'true';
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      let darkEnabled = isDarkStored || (isDarkStored === null && prefersDark);
-      
-      function applyDarkMode(enable) {
-        if (enable) {
-          document.body.classList.add('dark-theme');
-          if (toggleBtn) toggleBtn.innerHTML = '☀️';
-        } else {
-          document.body.classList.remove('dark-theme');
-          if (toggleBtn) toggleBtn.innerHTML = '🌙';
-        }
-        localStorage.setItem('medflow-dark-mode', enable);
-      }
-      
-      applyDarkMode(darkEnabled);
-      
-      if (toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-          darkEnabled = !darkEnabled;
-          applyDarkMode(darkEnabled);
-        });
-      }
-    })();
-  </script>
-  <!-- ensure that all utility classes from Tailwind CDN are combined with custom CSS without conflict -->
-  <!-- Additional small override: body scale fix for small screens (make sure layout works) -->
-  <style>
-    @media (max-width: 1024px) {
-      body {
-        transform: scale(0.8);
-        width: 125%;
-        margin-left: -12.5%;
-      }
-    }
-    @media (max-width: 640px) {
-      body {
-        transform: scale(0.8);
-        width: 125%;
-        margin-left: -12.5%;
-      }
-      .cta {
-        padding: 0.5rem 1.2rem;
-        font-size: 0.75rem;
-      }
-      h2 {
-        font-size: 1.8rem;
-      }
-    }
-    /* Smooth scaling effect */
-    body, .glass-card, .info-card, .cta {
-      transition: transform 0.2s ease, background 0.2s;
-    }
-  </style>
-</body>
-</html>
-```
+.dark-theme .text-slate-900,
+.dark-theme .text-\[\#1a2b4b\] {
+  color: #e2e8f0 !important;
+}
+
+.dark-theme .text-slate-800,
+.dark-theme .text-slate-700,
+.dark-theme .text-slate-600,
+.dark-theme .text-slate-500,
+.dark-theme .text-slate-400 {
+  color: #94a3b8 !important;
+}
+
+.dark-theme .border-slate-50,
+.dark-theme .border-slate-100,
+.dark-theme .border-slate-200 {
+  border-color: #334155 !important;
+}
+
+.dark-theme input,
+.dark-theme select,
+.dark-theme textarea {
+  background-color: #0b1220 !important;
+  border-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+.dark-theme .bg-red-50 {
+  background-color: #2a0d11 !important;
+}
+
+.dark-theme .border-red-100 {
+  border-color: #7f1d1d !important;
+}
