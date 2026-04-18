@@ -294,14 +294,14 @@ const Hero = ({ branding }: { branding: Branding }) => (
     <div className="absolute bottom-[-100px] left-[-100px] w-[600px] h-[600px] bg-[radial-gradient(circle,rgba(26,43,75,0.05)_0%,transparent_70%)] pointer-events-none -z-10" />
 
     <motion.div 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
+      initial={{ opacity: 0, y: 26, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ type: "spring", stiffness: 110, damping: 17 }}
       className="max-w-4xl"
     >
       <motion.div 
-        animate={{ y: [0, -10, 0] }}
-        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+        animate={{ rotate: [0, 1.2, 0, -1.2, 0], scale: [1, 1.01, 1] }}
+        transition={{ repeat: Infinity, duration: 7, ease: "easeInOut" }}
         className="mb-8"
       >
         <BrandLogo branding={branding} />
@@ -315,9 +315,9 @@ const Hero = ({ branding }: { branding: Branding }) => (
         ].map((item, index) => (
           <motion.div
             key={item}
-            initial={{ opacity: 0, y: 8 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: index * 0.08 }}
+            initial={{ opacity: 0, x: -18 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ type: "spring", stiffness: 140, damping: 16, delay: index * 0.1 }}
             viewport={{ once: true }}
             className="flex items-center gap-2"
           >
@@ -877,24 +877,24 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
         {filteredProducts.map((product, idx) => (
           <motion.div
             key={product.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -10, scale: 1.015 }}
-            transition={{ duration: 0.45, delay: idx * 0.05 }}
+            initial={{ opacity: 0, y: 26, scale: 0.96, rotate: -1 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+            whileHover={{ y: -8, rotateX: 2, rotateY: -2, scale: 1.01 }}
+            transition={{ type: "spring", stiffness: 130, damping: 17, delay: idx * 0.04 }}
             viewport={{ once: true }}
             onClick={() => onSelectProduct(product)}
             className="info-card flex flex-col group cursor-pointer hover:border-medical-accent/40 bg-white relative overflow-hidden"
           >
             <motion.div
-              className="absolute -top-10 -right-10 w-24 h-24 rounded-full bg-medical-accent/10 blur-xl"
-              animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.55, 0.3] }}
-              transition={{ duration: 3, repeat: Infinity, delay: idx * 0.1 }}
+              className="absolute top-0 -left-1/2 w-1/2 h-full bg-gradient-to-r from-transparent via-medical-accent/15 to-transparent"
+              animate={{ x: ["-20%", "240%"] }}
+              transition={{ duration: 2.8, repeat: Infinity, delay: idx * 0.15, ease: "linear" }}
             />
             <div className="h-56 flex items-center justify-center bg-medical-secondary/30 rounded-xl mb-6 group-hover:bg-medical-secondary/50 transition-colors overflow-hidden">
               <motion.div
                 className="text-medical-accent scale-150 transform group-hover:scale-[1.7] transition-transform duration-500 w-full h-full flex items-center justify-center"
-                animate={{ y: [0, -2, 0] }}
-                transition={{ duration: 2.2, repeat: Infinity, delay: idx * 0.08 }}
+                animate={{ rotate: [0, 2, 0, -2, 0] }}
+                transition={{ duration: 3.2, repeat: Infinity, delay: idx * 0.08 }}
               >
                 {product.image ? (
                   <img src={product.image} alt={product.name} className="w-full h-full object-contain p-4" referrerPolicy="no-referrer" />
@@ -909,8 +909,8 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
                 <h3 className="text-lg font-bold text-[#1a2b4b] group-hover:text-medical-accent transition-colors leading-tight">{product.name}</h3>
                 <motion.div
                   className="text-[10px] text-yellow-600 font-bold bg-yellow-50 px-2.5 py-1 rounded-full border border-yellow-100 uppercase"
-                  animate={{ scale: [1, 1.06, 1] }}
-                  transition={{ duration: 2, repeat: Infinity, delay: idx * 0.05 }}
+                  animate={{ rotate: [0, 3, 0, -3, 0] }}
+                  transition={{ duration: 2.4, repeat: Infinity, delay: idx * 0.05 }}
                 >
                   ⭐ {product.rating}
                 </motion.div>
