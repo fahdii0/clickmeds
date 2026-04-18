@@ -34,7 +34,9 @@ import {
   Settings, 
   Save, 
   RefreshCw,
-  Camera
+  Camera,
+  Moon,
+  Sun
 } from "lucide-react";
 
 // --- Types ---
@@ -215,8 +217,8 @@ const LogoIcon = ({ className = "w-6 h-6", branding }: { className?: string, bra
   </div>
 );
 
-const Navbar = ({ cartCount, onCartClick, onTrackClick, branding, isAdmin, onToggleAdmin }: { cartCount: number, onCartClick: () => void, onTrackClick: () => void, branding: Branding, isAdmin: boolean, onToggleAdmin: () => void }) => (
-  <nav className="fixed top-0 left-0 w-full z-100 bg-white/80 backdrop-blur-md px-6 py-4 flex items-center justify-between border-b border-medical-accent/10">
+const Navbar = ({ cartCount, onCartClick, onTrackClick, branding, isAdmin, onToggleAdmin, isDarkMode, onToggleTheme }: { cartCount: number, onCartClick: () => void, onTrackClick: () => void, branding: Branding, isAdmin: boolean, onToggleAdmin: () => void, isDarkMode: boolean, onToggleTheme: () => void }) => (
+  <nav className={`fixed top-0 left-0 w-full z-100 backdrop-blur-md px-6 py-4 flex items-center justify-between border-b transition-colors ${isDarkMode ? 'bg-slate-950/85 border-slate-800' : 'bg-white/80 border-medical-accent/10'}`}>
     <div className="flex items-center gap-2">
       <div className="bg-medical-accent/10 p-1.5 rounded-lg medical-glow border border-medical-accent/20">
         <LogoIcon className="w-6 h-6" branding={branding} />
@@ -226,7 +228,7 @@ const Navbar = ({ cartCount, onCartClick, onTrackClick, branding, isAdmin, onTog
       </span>
     </div>
     
-    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+    <div className={`hidden md:flex items-center gap-8 text-sm font-medium ${isDarkMode ? 'text-slate-300' : 'text-slate-600'}`}>
       <a href="#products" className="hover:text-medical-accent transition-colors">Products</a>
       <a href="#emergency" className="hover:text-medical-accent transition-colors">Emergency</a>
       <a href="#blood" className="hover:text-medical-accent transition-colors">Blood Bank</a>
@@ -235,6 +237,13 @@ const Navbar = ({ cartCount, onCartClick, onTrackClick, branding, isAdmin, onTog
     </div>
     
     <div className="flex gap-3 items-center">
+      <button
+        onClick={onToggleTheme}
+        className={`p-2.5 rounded-xl transition-all border ${isDarkMode ? 'bg-slate-900 text-amber-300 border-slate-700 hover:text-amber-200' : 'bg-white text-slate-500 border-slate-200 hover:text-medical-accent'}`}
+        title="Toggle Theme"
+      >
+        {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+      </button>
       <button 
         onClick={onToggleAdmin}
         className={`p-2.5 rounded-xl transition-all border ${isAdmin ? 'bg-medical-accent text-white border-medical-accent' : 'bg-slate-100 text-slate-400 border-slate-200 hover:text-medical-accent'}`}
@@ -512,7 +521,13 @@ const CheckoutModal = ({ cart, updateCart, onClose, onFinish }: { cart: CartItem
 
 const EmergencySection = () => (
   <section id="emergency" className="py-24 px-6 max-w-7xl mx-auto border-t border-slate-100">
-    <div className="bg-red-50 border border-red-100 rounded-[32px] p-8 md:p-12 relative overflow-hidden shadow-sm">
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+      viewport={{ once: true }}
+      className="bg-red-50 border border-red-100 rounded-[32px] p-8 md:p-12 relative overflow-hidden shadow-sm"
+    >
       <div className="absolute top-0 right-0 p-12 opacity-5 pointer-events-none">
         <AlertCircle className="w-48 h-48 text-red-600" />
       </div>
@@ -536,10 +551,10 @@ const EmergencySection = () => (
               Immediate medical support for emergencies. Find the nearest trauma center or call a frontline responder available 24/7.
             </p>
             <div className="flex flex-wrap gap-4">
-              <button className="bg-red-600 hover:bg-red-700 text-white font-bold px-10 py-5 rounded-2xl flex items-center gap-3 transition-all shadow-xl shadow-red-200">
+              <a href="tel:1122" className="bg-red-600 hover:bg-red-700 text-white font-bold px-10 py-5 rounded-2xl flex items-center gap-3 transition-all shadow-xl shadow-red-200 hover:-translate-y-0.5">
                 <Phone className="w-5 h-5" />
                 Call 1122
-              </button>
+              </a>
               <button className="bg-white border border-slate-200 hover:border-red-600 hover:text-red-600 text-slate-700 font-bold px-10 py-5 rounded-2xl transition-all shadow-sm">
                 Doctor Consultation
               </button>
@@ -547,30 +562,30 @@ const EmergencySection = () => (
           </div>
           
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group">
+            <motion.div whileHover={{ y: -4 }} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden group">
               <div className="absolute top-0 left-0 w-1 h-full bg-red-600" />
               <h4 className="font-bold text-slate-800 mb-1">Ambulance</h4>
               <p className="text-[10px] uppercase font-black text-red-600 tracking-widest">Active Now</p>
-            </div>
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+            </motion.div>
+            <motion.div whileHover={{ y: -4 }} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
                <div className="absolute top-0 left-0 w-1 h-full bg-red-600/30" />
               <h4 className="font-bold text-slate-800 mb-1">Trauma Unit</h4>
               <p className="text-xs text-slate-400">4 nearby</p>
-            </div>
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+            </motion.div>
+            <motion.div whileHover={{ y: -4 }} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
                <div className="absolute top-0 left-0 w-1 h-full bg-red-600/30" />
               <h4 className="font-bold text-slate-800 mb-1">Oxygen Supply</h4>
               <p className="text-xs text-slate-400">Limited Stock</p>
-            </div>
-            <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
+            </motion.div>
+            <motion.div whileHover={{ y: -4 }} className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm relative overflow-hidden">
                <div className="absolute top-0 left-0 w-1 h-full bg-red-600" />
               <h4 className="font-bold text-slate-800 mb-1">Night Pharmacy</h4>
               <p className="text-[10px] uppercase font-black text-red-600 tracking-widest">Open Now</p>
-            </div>
+            </motion.div>
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   </section>
 );
 
@@ -837,6 +852,7 @@ const Products = ({ onSelectProduct, products }: { onSelectProduct: (p: Product)
             key={product.id}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -8, scale: 1.01 }}
             transition={{ duration: 0.5, delay: idx * 0.05 }}
             viewport={{ once: true }}
             onClick={() => onSelectProduct(product)}
@@ -1501,6 +1517,7 @@ const AdminPanel = ({
 
 export default function App() {
   const [isAdminMode, setIsAdminMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
   const [branding, setBranding] = useState<Branding>({
     name: "Click",
     accentTitle: "Meds",
@@ -1518,6 +1535,17 @@ export default function App() {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   const [isTrackOpen, setIsTrackOpen] = useState(false);
   const [lastOrderId, setLastOrderId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const savedTheme = window.localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      setIsDarkMode(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    window.localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
   useEffect(() => {
     const loadInitialData = async () => {
@@ -1573,7 +1601,7 @@ export default function App() {
   };
 
   return (
-    <main className="selection:bg-medical-accent selection:text-black min-h-screen">
+    <main className={`selection:bg-medical-accent selection:text-black min-h-screen ${isDarkMode ? 'dark-theme' : ''}`}>
       <Navbar 
         cartCount={cart.reduce((a, b) => a + b.quantity, 0)} 
         onCartClick={() => setIsCheckoutOpen(true)} 
@@ -1581,6 +1609,8 @@ export default function App() {
         branding={branding}
         isAdmin={isAdminMode}
         onToggleAdmin={() => setIsAdminMode(!isAdminMode)}
+        isDarkMode={isDarkMode}
+        onToggleTheme={() => setIsDarkMode(prev => !prev)}
       />
       
       {isAdminMode ? (
@@ -1597,7 +1627,6 @@ export default function App() {
       ) : (
         <>
           <Hero branding={branding} />
-          <EmergencySection />
           <Products onSelectProduct={setSelectedProduct} products={products} />
           <BloodDonationSection branding={branding} />
           
@@ -1643,6 +1672,8 @@ export default function App() {
               ))}
             </div>
           </section>
+
+          <EmergencySection />
 
           <HelpCenter />
           <Footer branding={branding} />
